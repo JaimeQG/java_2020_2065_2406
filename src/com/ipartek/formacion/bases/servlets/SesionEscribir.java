@@ -1,6 +1,7 @@
 package com.ipartek.formacion.bases.servlets;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,14 +16,17 @@ public class SesionEscribir extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession HttpSession = request.getSession();
-//		HttpSession.setAttribute(name, value);
+		HttpSession session = request.getSession();
 
+		session.setAttribute("nombre", "Javier");
+		session.setAttribute("fecha", new Date());
+
+		response.setContentType("text/plain");
+		response.getWriter().println("Escritos datos de sesión");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		doGet(request, response);
 	}
 
