@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Formulrio de ejemplo</title>
+</head>
+<body>
+
+	<a href="hola?nombre=Javier+Lete">Saludar a Javier Lete</a> 
+	<!-- http://localhost:8081/bases/hola?nombre=Javier+Lete -->
+	
+	<form action="hola">
+		<input type="text" placeholder="Nombre" name="nombre" />
+		<input type="password" placeholder="Contraseña" name="password" />
+		<button>Aceptar</button>
+	</form>
+	<!-- http://localhost:8081/bases/hola?nombre=Laika&passwod -->
+	
+	<form action="hola" method="post">   
+		<input type="text" placeholder="Nombre" name="nombre" />
+		<input type="password" placeholder="Contraseña" name="password" />
+		<button>Aceptar</button>
+	</form>
+	<!-- No sale en la URL el nombre que se introduce por pantalla -->
+	<!-- http://localhost:8081/bases/hola -->
+	
+</body>
+</html>
