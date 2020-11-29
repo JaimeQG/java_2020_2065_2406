@@ -1,4 +1,4 @@
-package com.ipartek.formacion.bases.servlets;
+package com.ipartek.formacion.bases.servlets.ejercicios;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,39 +10,37 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/cookie-read")
-public class CookieRead extends HttpServlet {
+@WebServlet("/cookie-idioma")
+public class CookieIdiomaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-
 		String idioma = null;
 
 		Cookie[] cookies = request.getCookies();
 
-		if (cookies.length > 0) {
-			for (Cookie c : cookies) {
-				if (c.getName().equals("idioma")) {
-					idioma = c.getName();
-					String value = c.getValue();
-					out.println(idioma + " = " + value);
-					break;
-				}
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals("idioma")) {
+				idioma = cookie.getValue();
+				break;
 			}
-		} else {
-			out.println("*** No hay cookie que mostrar ***");
 		}
+
+		response.setContentType("text/plain");
+		PrintWriter out = response.getWriter();
+		out.println(idioma);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String idioma = request.getParameter("idioma");
 
-		doGet(request, response);
-		response.sendRedirect("cookie-read");
+		Cookie cookie = new Cookie("idioma", idioma);
+
+		response.addCookie(cookie);
+
+		response.sendRedirect("cookie-idioma");
 	}
 
 }
