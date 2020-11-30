@@ -68,7 +68,7 @@ public class PerroDaoHashMap implements Dao<Perro> {
 		// si no existe, insertarlo y actulizar id
 		if (!encontrado) {
 			perro.setId(indice); // setear el id en el objeto
-			hmPerros.put(indice, perro); // guardar objeto en hasmap
+			hmPerros.put(indice, perro); // guardar objeto en hashmap
 			indice++; // actualizar el indice para la sigueinte insercción
 			resultado = true;
 		}
