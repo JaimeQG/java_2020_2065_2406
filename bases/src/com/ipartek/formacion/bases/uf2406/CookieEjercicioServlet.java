@@ -20,13 +20,14 @@ public class CookieEjercicioServlet extends HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 
-		// print out cookies
 		Cookie[] cookies = request.getCookies();
-		for (int i = 0; i < cookies.length; i++) {
-			Cookie c = cookies[i];
-			String name = c.getName();
-			String value = c.getValue();
-			out.println(name + " = " + value);
+
+		if (cookies.length > 0) {
+			for (Cookie c : cookies) {
+				out.println(c.getName() + " = " + c.getValue());
+			}
+		} else {
+			out.println("*** No hay cookie que mostrar ***");
 		}
 
 	}
@@ -37,9 +38,11 @@ public class CookieEjercicioServlet extends HttpServlet {
 		String nombre = request.getParameter("nombre");
 		String valor = request.getParameter("color");
 
-		Cookie cookie = new Cookie(nombre, valor);
-
-		response.addCookie(cookie);
+		if (nombre != null && nombre.length() > 0) {
+			Cookie cookie = new Cookie(nombre, valor);
+			cookie.setMaxAge(Integer.MAX_VALUE); // Integer.MAX_VALUE
+			response.addCookie(cookie);
+		}
 
 		response.sendRedirect("cookie-ejercicio");
 	}

@@ -3,6 +3,7 @@ package com.ipartek.formacion.bases.uf2406;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,17 +19,23 @@ public class SesionEjercicioServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		response.setContentType("text/plain");
+		HttpSession session = request.getSession();
 
+		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
 
-		out.println(request.getHeader("referer"));
-		out.println(request.getHeader("accept-language"));
-		out.println(request.getHeader("user-agent"));
+		response.getWriter().println("Escritos datos de sesión: ");
+
+		out.println(request.getHeader("user-agent")); // Navegador utilizado
+
+		Enumeration<String> e = session.getAttributeNames();
+		while (e.hasMoreElements()) {
+			String name = (String) e.nextElement();
+			String value = session.getAttribute(name).toString();
+			out.println(name + " = " + value);
+		}
 
 		out.println(request.getMethod());
-		out.println(request.getPathInfo());
-		out.println(request.getRemoteAddr());
 
 	}
 
@@ -37,15 +44,14 @@ public class SesionEjercicioServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 
-		String nombre = request.getParameter("nombre");
+		String nombre = request.getParameter("nombre"); // Nombre del usuario
 
 		if (nombre != null && nombre.length() > 0) {
-			String dataValue = request.getParameter("dataValue");
-			session.setAttribute(nombre, dataValue);
+			session.setAttribute("Usuario", nombre);
 		}
 
-		Date created = new Date(session.getCreationTime());
-		session.setAttribute("fecha", created);
+		Date created = new Date(session.getCreationTime()); // Fecha de la sesión
+		session.setAttribute("fecha_sesion", created);
 
 		response.sendRedirect("sesion-ejercicio");
 	}
