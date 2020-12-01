@@ -10,6 +10,5 @@ public interface Dao<T> {
 
 	void modificar(T objeto);
 
-	void eliminar(T objeto);
-
+	void eliminar(Long id);
 }
