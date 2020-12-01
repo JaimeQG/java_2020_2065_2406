@@ -20,6 +20,7 @@ public class ProductoDaoTreeMap implements Dao<Producto> {
 	}
 
 	// FIN SINGLETON
+
 	@Override
 	public Iterable<Producto> obtenerTodos() {
 
