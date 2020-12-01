@@ -32,10 +32,11 @@ public class PerroDaoHashMap implements Dao<Perro> {
 	}
 	// FIN SINGLETON
 
-	private HashMap<Integer, Perro> hmPerros = new HashMap<>();
+	private HashMap<Integer, Perro> hmPerros = new HashMap<Integer, Perro>();
 
 	@Override
 	public Iterable<Perro> listar() {
+
 		return hmPerros.values();
 	}
 
@@ -63,7 +64,7 @@ public class PerroDaoHashMap implements Dao<Perro> {
 				break;
 			}
 
-		} // forrrr
+		} // for
 
 		// si no existe, insertarlo y actulizar id
 		if (!encontrado) {
