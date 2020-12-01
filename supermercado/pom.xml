@@ -5,7 +5,26 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>Supermercado</name>
-  <description>Supermercado</description>
+  <description>Supermercado hecho con MVC, Bootstrap y capa de acceso a datos</description>
+  
+  <dependencies>
+  	<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+	<dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>javax.servlet-api</artifactId>
+    	<version>4.0.1</version>
+    	<scope>provided</scope>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+	<dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>jstl</artifactId>
+    	<version>1.2</version>
+	</dependency>
+	
+  </dependencies>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
