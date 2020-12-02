@@ -8,29 +8,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.formacion.supermercado.accesodatos.Dao;
-import com.ipartek.formacion.supermercado.accesodatos.ProductoDaoTreeMap;
-import com.ipartek.formacion.supermercado.modelos.Producto;
-
-/**
- * Servlet implementation class PrincipalServlet
- */
-@WebServlet("/principal")
-public class PrincipalServlet extends HttpServlet {
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
-		Iterable<Producto> productos = dao.obtenerTodos();
-		request.setAttribute("productos", productos);
-		request.getRequestDispatcher("/WEB-INF/vistas/principal.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/vistas/login.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		doGet(request, response);
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+
+		response.setContentType("text/plain");
+		response.getWriter().println(email + ", " + password);
 	}
 
 }

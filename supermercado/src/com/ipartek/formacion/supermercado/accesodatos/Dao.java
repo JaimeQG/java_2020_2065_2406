@@ -1,4 +1,4 @@
-package com.ipartek.formacion.supermercdo.accesodatos;
+package com.ipartek.formacion.supermercado.accesodatos;
 
 public interface Dao<T> {
 

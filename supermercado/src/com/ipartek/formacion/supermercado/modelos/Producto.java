@@ -13,6 +13,19 @@ public class Producto {
 	private BigDecimal precioUnidadMedida;
 	private Integer cantidad;
 
+	public Producto() {
+		super();
+		this.id = (long) 0;
+		this.nombre = "nombre";
+		this.descripcion = "descripcion";
+		this.urlImagen = "urlImagen";
+		this.precio = new BigDecimal(0);
+		this.descuento = 0;
+		this.unidadMedida = "unidadMedida";
+		this.precioUnidadMedida = new BigDecimal(0);
+		this.cantidad = 1;
+	}
+
 	public Producto(Long id, String nombre, String descripcion, String urlImagen, BigDecimal precio, Integer descuento,
 			String unidadMedida, BigDecimal precioUnidadMedida, Integer cantidad) {
 		super();
@@ -97,6 +110,20 @@ public class Producto {
 
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
+	}
+
+	public BigDecimal getPrecioConDescuento() {
+		// return precio - precio * descuento / 100
+
+		if (descuento == null || descuento == 0) {
+			return null;
+		}
+
+		if (descuento == 100) {
+			return BigDecimal.ZERO;
+		}
+
+		return precio.subtract(precio.multiply(new BigDecimal(descuento).divide(new BigDecimal(100))));
 	}
 
 	@Override
