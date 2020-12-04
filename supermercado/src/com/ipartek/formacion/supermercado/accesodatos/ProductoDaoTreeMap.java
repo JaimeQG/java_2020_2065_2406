@@ -3,6 +3,8 @@ package com.ipartek.formacion.supermercado.accesodatos;
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.SerializationUtils;
+
 import com.ipartek.formacion.supermercado.modelos.Producto;
 
 public class ProductoDaoTreeMap implements Dao<Producto> {
@@ -59,7 +61,7 @@ public class ProductoDaoTreeMap implements Dao<Producto> {
 	@Override
 	public Producto obtenerPorId(Long id) {
 
-		return productos.get(id);
+		return SerializationUtils.clone(productos.get(id));
 	}
 
 	@Override

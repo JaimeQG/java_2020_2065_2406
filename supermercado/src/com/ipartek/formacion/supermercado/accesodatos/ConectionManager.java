@@ -1,4 +1,4 @@
-package com.ipartek.formacion.supermercado.modelos;
+package com.ipartek.formacion.supermercado.accesodatos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

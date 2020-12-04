@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.accesodatos;
 
+/* Data Access Object */
 public interface Dao<T> {
 
 	Iterable<T> obtenerTodos();

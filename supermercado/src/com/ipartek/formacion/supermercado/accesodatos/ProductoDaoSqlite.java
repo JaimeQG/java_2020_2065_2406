@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.TreeMap;
 
-import com.ipartek.formacion.supermercado.modelos.ConectionManager;
 import com.ipartek.formacion.supermercado.modelos.Producto;
 
 public class ProductoDaoSqlite implements Dao<Producto> {

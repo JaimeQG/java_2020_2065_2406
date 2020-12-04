@@ -13,12 +13,11 @@
 						estamos</a></li>
 			</ul>
 			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-whatsapp"></i></a></li>
-				<li class="nav-item"><a class="nav-link" href="#"><i
-						class="fab fa-facebook"></i></a></li>
-				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-twitter"></i></a></li>
 				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-instagram"></i></a></li>
-				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-youtube-square"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-facebook"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-twitter"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-whatsapp"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-envelope-square"></i></a></li>
 			</ul>
 		</div>
 	</nav>

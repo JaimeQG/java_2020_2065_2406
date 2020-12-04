@@ -2,6 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/vistas/includes/cabecera.jsp"%>
 
+<c:if test="${mensaje != null}">
+   <div class="alert alert-danger" role="alert">
+  		${mensaje}
+  	</div>
+</c:if>
+
 <form action="login" method="post">
 	<div class="form-group row">
 		<label for="email" class="col-sm-2 col-form-label">Email</label>
