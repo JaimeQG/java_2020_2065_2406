@@ -60,7 +60,7 @@ public class ProductoDaoTreeMap implements Dao<Producto> {
 
 	@Override
 	public Producto obtenerPorId(Long id) {
-
+		// Devolver un clon del producto al obtenerPorId en el DAO
 		return SerializationUtils.clone(productos.get(id));
 	}
 
