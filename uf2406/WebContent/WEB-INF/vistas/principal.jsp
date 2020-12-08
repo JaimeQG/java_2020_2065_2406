@@ -22,7 +22,7 @@
 					<th>${producto.nombre}</th>
 					<th><fmt:formatNumber type="currency" value="${producto.precio}" /></th>
 					<th><input type="number" placeholder=""
-									aria-label="Cantidad" value="0" name="${producto.id}"
+									aria-label="Cantidad" value="${producto.cantidad}" name="${producto.id}"
 									min="0" /></th>
 				</tr>
 			</c:forEach>
