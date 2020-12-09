@@ -33,7 +33,9 @@
 	 		</tr>
 	 	</tfoot>	
 	</table>
-	<button class="btn btn-primary btn-block mb-3">Process Request</button>
+	<div>
+		<button class="btn btn-primary btn-block mb-3">Process Request</button>
+	</div>
 </form>
 
 <%@ include file="/WEB-INF/vistas/includes/pie.jsp"%>
