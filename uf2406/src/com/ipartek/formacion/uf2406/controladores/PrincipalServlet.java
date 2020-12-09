@@ -26,6 +26,7 @@ public class PrincipalServlet extends HttpServlet {
 		Iterable<Producto> productos = dao.obtenerTodos();
 		request.setAttribute("productos", productos);
 		request.getRequestDispatcher("/WEB-INF/vistas/principal.jsp").forward(request, response);
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/vistas/includes/cabecera.jsp"%>
 
+
 <h1>Make your order</h1>
 <form action="agregartodocarrito" method="get">
 	

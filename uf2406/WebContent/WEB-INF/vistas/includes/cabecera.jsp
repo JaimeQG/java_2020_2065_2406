@@ -7,6 +7,7 @@
 <html lang="es">
 <head>
 
+
 <%-- <base href="/uf2406/" /> --%>
 <base href="${pageContext.request.contextPath}/" />
 <!-- Required meta tags -->
@@ -38,10 +39,6 @@
 							<span class="sr-only">(current)</span>
 					</a></li>
 				</ul>
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href="carrito">Ver carrito</a>
-				</ul>
-
 			</div>
 		</nav>
 	</header>

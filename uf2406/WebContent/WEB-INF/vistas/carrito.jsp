@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/vistas/includes/cabecera.jsp"%>
 
+
 <h1>Your choice was</h1>
 <!-- ${carrito} -->
 <table class="table table-striped table-bordered table-hover table-sm">

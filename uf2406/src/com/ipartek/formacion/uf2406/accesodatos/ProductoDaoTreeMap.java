@@ -19,21 +19,11 @@ public class ProductoDaoTreeMap implements Dao<Producto> {
 
 	// SINGLETON
 
-	// Ponemos privado el constructor por defecto para que nadie pueda crear
-	// instancias de esta clase de forma libre
-	// Con esto evitamos la posibilidad de que nadie haga new de esta clase (salvo
-	// esta clase en sí misma)
 	private ProductoDaoTreeMap() {
 	}
 
-	// Creamos el único objeto que va a existir de este tipo. Lo llamamos INSTANCIA
 	private static ProductoDaoTreeMap INSTANCIA = new ProductoDaoTreeMap();
 
-	// Creamos un método público que de acceso a la única instancia disponible
-	// Desde otras clases deberemos hacer
-	// ProductoDaoTreeMap dao = ProductoDaoTreeMap.getInstancia();
-	// o mejor
-	// Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
 	public static ProductoDaoTreeMap getInstancia() {
 		return INSTANCIA;
 	}

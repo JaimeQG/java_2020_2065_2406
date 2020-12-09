@@ -31,7 +31,8 @@ public class AgregarTodoCarritoServlet extends HttpServlet {
 
 		Enumeration<String> ids = request.getParameterNames();
 
-		System.out.println("¿Hay elementos en la colección de nombres? " + ids.hasMoreElements());
+		// System.out.println("¿Hay elementos en la colección de nombres? " +
+		// ids.hasMoreElements());
 
 		String sId;
 		Long id;
