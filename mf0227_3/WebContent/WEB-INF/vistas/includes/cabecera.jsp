@@ -7,7 +7,7 @@
 <html lang="es">
 <head>
 
-<%-- <base href="/mf0227_3/" /> --%>
+<%-- <base href="/supermercado/" /> --%>
 <base href="${pageContext.request.contextPath}/" />
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -21,14 +21,14 @@
 <!-- Datatables -->
 <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css" />
 <!-- Hoja de estilos personalizada -->
-<link rel="stylesheet" href="css/supermercado.css">
+<link rel="stylesheet" href="css/libreria.css">
 
-<title>Supermercado</title>
+<title>Librería</title>
 </head>
 <body>
 	<header class="sticky-top">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">Supermercado</a>
+			<a class="navbar-brand" href="#"><i class="d-inline-block align-middle pr-2 fas fa-book"></i></i>Librería</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#menuprincipal"
 				aria-controls="menuprincipal" aria-expanded="false"
@@ -43,35 +43,24 @@
 					</a></li>
 					<c:if test="${sessionScope.usuario != null}">
 						<li class="nav-item"><a class="nav-link" href="admin/index">Mantenimiento
-								Productos</a></li>
+								Libros</a></li>
 					</c:if>
 				</ul>
 				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href="carrito">Ver
-							carrito</a> <c:choose>
+					<c:choose>
 							<c:when test="${sessionScope.usuario == null}">
 								<li class="nav-item"><a class="nav-link" href="login">Iniciar
 										sesión</a></li>
 							</c:when>
 							<c:otherwise>
-								<li class="nav-item"><a class="navbar-text">${sessionScope.usuario.email}</a>
+								<li class="nav-item"><a class="navbar-text">@${sessionScope.usuario.nombre}</a>
 								</li>
 								<li class="nav-item"><a class="nav-link" href="logout">Cerrar
 										sesión</a></li>
 							</c:otherwise>
-						</c:choose></li>
+					</c:choose>
 				</ul>
 			</div>
 		</nav>
-		<c:if test="${alertaTexto != null}">
-			<div class="alert alert-${alertaNivel} alert-dismissible fade show"
-				role="alert">
-				${alertaTexto}
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-		</c:if>
 	</header>
 	<main class="container-fluid pt-3">
