@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/vistas/includes/cabecera.jsp"%>
 
-<div class="table-responsive">
+<div class="table-responsive mb-3">
 	<table class="table table-striped table-bordered table-hover table-sm">
 		<caption>Listado de libros</caption>
 		<thead class="thead-dark">
@@ -27,7 +27,7 @@
 					<td>${libro.autor}</td>	
 					<td>
 						<div class="btn-group" role="group" aria-label="Opciones">
-							<a class="btn btn-primary btn-sm" href="admin/producto?id=${libro.id}">Editar</a>
+							<a class="btn btn-primary btn-sm" href="admin/libro?id=${libro.id}">Editar</a>
 							<a onclick="return confirm('¿Estás seguro?')" class="btn btn-danger btn-sm" href="admin/borrar?id=${libro.id}">Borrar</a>
 						</div>
 					</td>

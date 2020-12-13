@@ -23,8 +23,8 @@
 		<label for="nombre" class="col-md-4 col-lg-3  col-form-label">Nombre</label>
 		<div class="col">
 			<input type="text" class="form-control ${libro.errorNombre != null ? 'is-invalid' : '' }" id="nombre" name="nombre" value="${libro.nombre}"
-				required minlength="2" pattern="\p{Lu}\p{Ll}{2}[\p{Ll} ]*"
-				placeholder="Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 2 caracteres. Máximo 150.">
+				required minlength="2" autofocus pattern="^[A-Za-z0-9 -]+$"
+				placeholder="Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 2 caracteres (Máx. 150).">
 			<div class="valid-feedback">Nombre correcto</div>
 			<div class="invalid-feedback">${libro.errorNombre != null ? libro.errorNombre : 'Debe introducir un nombre con
 				 mínimo 2 caracteres - máximo 150, y solo letras y mayúscula la primera'}</div>
@@ -35,7 +35,7 @@
 	<div class="form-group row">
 		<label for="urlImagen" class="col-md-4 col-lg-3 col-form-label">Imagen</label>
 		<div class="col">
-			<input type="url" class="form-control" id="urlImagen" name="urlImagen"
+			<input type="text" class="form-control" id="urlImagen" name="urlImagen"
 				placeholder="URL de la imagen a mostrar del producto" value="${libro.urlImagen}">
 			<div class="valid-feedback">Imagen correcta</div>
 			<div class="invalid-feedback"></div>
@@ -78,7 +78,7 @@
 		<label for="autor" class="col-md-4 col-lg-3  col-form-label">Autor</label>
 		<div class="col">
 			<input type="text" class="form-control" id="autor" name="autor" value="${libro.autor}"
-				pattern="\p{Lu}\p{Ll}{2}[\p{Ll} ]*"
+				pattern="^[A-Za-z -]+$"
 				placeholder="Debe introducir un autor con solo letras y mayúscula la primera">
 			<div class="valid-feedback">Autor correcto</div>
 			<div class="invalid-feedback"></div>

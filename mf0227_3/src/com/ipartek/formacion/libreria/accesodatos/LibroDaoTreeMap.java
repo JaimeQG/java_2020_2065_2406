@@ -17,7 +17,7 @@ public class LibroDaoTreeMap implements Dao<Libro> {
 		libreria.put(3L, new Libro(3L, "Los futbolísimos. El misterio del tesoro pirata", new BigDecimal("12.95"), 15,
 				"Roberto Santiago", "imgs/libros/imagen10.jpg"));
 		libreria.put(4L, new Libro(4L, "Los favoritos de Midas", new BigDecimal("12.95"), 5, "Jack Lemond",
-				"imgs/libros/imagen.jpg"));
+				"imgs/libros/imagen_default.jpg"));
 	}
 
 	// SINGLETON

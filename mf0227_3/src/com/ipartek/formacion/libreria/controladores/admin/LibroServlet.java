@@ -14,7 +14,7 @@ import com.ipartek.formacion.libreria.accesodatos.Dao;
 import com.ipartek.formacion.libreria.accesodatos.LibroDaoTreeMap;
 import com.ipartek.formacion.libreria.modelos.Libro;
 
-@WebServlet("/admin/producto")
+@WebServlet("/admin/libro")
 public class LibroServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class LibroServlet extends HttpServlet {
 			// 4. Generar modelo para la vista
 			request.setAttribute("libro", libro);
 			// 5. Redirigir a otra vista
-			request.getRequestDispatcher("/WEB-INF/vistas/admin/producto.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/vistas/admin/libro.jsp").forward(request, response);
 			return;
 		}
 

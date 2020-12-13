@@ -13,6 +13,10 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+<!-- favicon -->
+<link rel="shortcut icon" href="imgs/favicon.ico" type="image/x-icon">
+<link rel="icon" href="imgs/favicon.ico" type="image/x-icon">
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -62,5 +66,15 @@
 				</ul>
 			</div>
 		</nav>
+		<c:if test="${alertaTexto != null}">
+			<div class="alert alert-${alertaNivel} alert-dismissible fade show" role="alert">
+					${alertaTexto}
+				<button type="button" class="close" data-dismiss="alert"
+						aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</c:if>
+		
 	</header>
 	<main class="container-fluid pt-3">

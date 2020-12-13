@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class Libro {
 
-	static final protected String AUTOR = "Anónimo";
-	static final protected String URL_IMAGEN = "imgs/libros/imagen.jpg";
+	static final protected String AUTOR_DEFECTO = "Anónimo";
+	static final protected String URL_IMAGEN = "imgs/libros/imagen_default.jpg";
 
 	private Long id;
 	private String nombre;
@@ -84,7 +84,7 @@ public class Libro {
 	}
 
 	public void setNombre(String nombre) {
-		if (nombre == null || nombre.trim().length() < 3 || !nombre.matches("\\p{Lu}\\p{Ll}{2}[\\p{Ll} ]*")) {
+		if (nombre == null || nombre.trim().length() < 2 || !nombre.matches("^[A-Za-z0-9 -]+$")) {
 			setErrorNombre("Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres");
 		}
 		this.nombre = nombre;
@@ -122,7 +122,7 @@ public class Libro {
 
 	public void setAutor(String autor) {
 
-		setAutor(autor.trim().length() != 0 ? autor : AUTOR);
+		this.autor = autor.trim().length() != 0 ? autor : AUTOR_DEFECTO;
 	}
 
 	public String getUrlImagen() {
@@ -131,7 +131,7 @@ public class Libro {
 
 	public void setUrlImagen(String urlImagen) {
 
-		setUrlImagen(urlImagen.trim().length() != 0 ? urlImagen : URL_IMAGEN);
+		this.urlImagen = urlImagen.trim().length() != 0 ? urlImagen : URL_IMAGEN;
 	}
 
 	public boolean isCorrecto() {
