@@ -69,9 +69,10 @@ public class AppLibreria {
 		System.out.println("-------------------------------------");
 
 		for (Libro libro : libreria.obtenerTodos()) {
-			System.out.println(String.format("[%s] %-17s ........... [%.2f€ %s] ", libro.getId(), libro.getNombre(),
-					libro.getPrecio(), (libro.getDescuento() > 0 ? "- Descuento %:" + libro.getDescuento() : ""),
-					libro.getAutor(), libro.getUrlImagen()));
+			System.out.println(String.format("[%s] %-17s (%s) ........... [%.2f€ %s] (%s)", libro.getId(),
+					libro.getNombre(), libro.getAutor(), libro.getPrecio(),
+					(libro.getDescuento() > 0 ? "- Descuento: " + libro.getDescuento() + "%" : ""),
+					libro.getUrlImagen()));
 		}
 
 		System.out.println("-------------------------------------");
@@ -95,14 +96,12 @@ public class AppLibreria {
 		do {
 			do {
 				try {
-					System.out.println("Introduce el ID del libro que quieres borrar");
+					System.out.println("Introduce el ID del libro que quieres borrar:");
 					id = Long.parseLong(sc.nextLine());
 
 					// si la linea de arriba lanza excepcion, estas de abajo nunca se ejecutaran
 					isError = false;
 				} catch (Exception e) {
-					// si quereis ver la traza de la Excepcion, usar e.printStackTrace()
-					// e.printStackTrace();
 					System.out.println("**error, no es un numero valido. Escribe un numero");
 				}
 			} while (isError);
@@ -136,7 +135,7 @@ public class AppLibreria {
 						libreria.eliminar(id);
 						flag = false;
 						System.out.println("-------------------------------------");
-						System.out.printf("Hemos dado de baja el libro: %s [%s paginas] \n", libroEliminar.getNombre(),
+						System.out.printf("Hemos dado de baja el libro: %s (%s) \n", libroEliminar.getNombre(),
 								libroEliminar.getAutor());
 						System.out.println("-------------------------------------");
 
@@ -172,13 +171,16 @@ public class AppLibreria {
 			try {
 				System.out.println("Introduzca precio del libro:  \n");
 				precio = new BigDecimal(sc.nextLine());
-				isError = false;
+				if (precio == null || precio.compareTo(BigDecimal.ZERO) < 0) {
+					System.out.println("** error: el precio tiene que ser mayor que 0");
+				} else {
+					isError = false;
+				}
 			} catch (NumberFormatException e) {
-				System.out.println("**error, no es un numero valido");
+				System.out.println("**error: no es un numero valido");
 
 			} catch (Exception e) {
-				System.out.println("**error, no es un numero valido");
-
+				System.out.println("**error: no es un numero valido");
 			}
 		} while (isError);
 
@@ -218,6 +220,12 @@ public class AppLibreria {
 		} while (isError);
 	}
 
+	/**
+	 * Saca por pantalla el menú de opciones
+	 * 
+	 * @param
+	 * @return
+	 */
 	private static void pintarMenu(final String nombrePojo) {
 
 		System.out.println("************************************");
@@ -232,7 +240,7 @@ public class AppLibreria {
 	/**
 	 * Valida que los datos introducidos por pantalla son de tipo int
 	 * 
-	 * @param nombre de la propiedad de tipo entero de la Clase Coche
+	 * @param nombre de la propiedad de tipo entero de la Clase Libro
 	 * @return valor de tipo entero
 	 */
 	private static int validarInt(String propiedad) throws Exception {

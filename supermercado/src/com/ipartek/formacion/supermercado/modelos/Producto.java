@@ -191,7 +191,7 @@ public class Producto implements Serializable {
 
 	public void setCantidad(Integer cantidad) {
 		if (cantidad == null || cantidad < 0) {
-			setCantidad("La cantidad debe ser mayor o igual a cero. Es obligatoria");
+			setErrorCantidad("La cantidad debe ser mayor o igual a cero. Es obligatoria");
 		}
 		this.cantidad = cantidad;
 	}
