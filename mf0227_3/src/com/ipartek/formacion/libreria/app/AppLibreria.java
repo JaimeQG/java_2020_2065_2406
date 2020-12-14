@@ -167,14 +167,20 @@ public class AppLibreria {
 			e.printStackTrace();
 		}
 
-		do { // controlamos que no se meta un caracter o dato erroneo
+		do { // Precio libro
 			try {
 				System.out.println("Introduzca precio del libro:  \n");
-				precio = new BigDecimal(sc.nextLine());
-				if (precio == null || precio.compareTo(BigDecimal.ZERO) < 0) {
-					System.out.println("** error: el precio tiene que ser mayor que 0");
+				String precioString = sc.nextLine();
+
+				if (precioString.matches("\\d+\\.\\d\\d")) {
+					precio = new BigDecimal(precioString);
+					if (precio == null || precio.compareTo(BigDecimal.ZERO) < 0) {
+						System.out.println("** error: el precio tiene que ser mayor que 0");
+					} else {
+						isError = false;
+					}
 				} else {
-					isError = false;
+					System.out.println("**error: no es un numero valido");
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("**error: no es un numero valido");
@@ -250,7 +256,7 @@ public class AppLibreria {
 
 		// Repetir hasta que no haya error
 		do {
-			System.out.println("Introduzca el " + propiedad + " del libro: ");
+			System.out.println("Introduzca el " + propiedad + " del libro: \n");
 			try {
 				intEntero = Integer.parseInt(sc.nextLine());
 
@@ -283,9 +289,10 @@ public class AppLibreria {
 
 		// Repetir hasta que no haya error
 		do {
-			System.out.println("Introduzca el " + propiedad + " del libro: ");
+			System.out.println("Introduzca el " + propiedad + " del libro: \n");
 			nombre = sc.nextLine();
-			if (nombre.trim().length() < 2 || nombre.trim().length() > 150) {
+			if (nombre.trim().length() < 2 || nombre.trim().length() > 150
+					|| !nombre.matches("^[A-Za-z0-9ñÑ\\. -]+$")) {
 				System.out.println("**error, el " + propiedad + " debe tener más de 2 letras y menos de 150. " + nombre
 						+ " tiene " + nombre.length() + " caracteres \n");
 			} else {

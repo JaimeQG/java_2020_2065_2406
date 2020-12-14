@@ -18,25 +18,11 @@ public class LibroServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// 1. Recoger información de la petición
 
-		String id = request.getParameter("id");
-
-		// 2. Poner información dentro de un modelo
-		// 3. Tomar decisiones según lo recibido
-
-		if (id != null) {
-			Dao<Libro> dao = LibroDaoTreeMap.getInstancia();
-
-			Libro libro = dao.obtenerPorId(Long.parseLong(id));
-
-			// 4. Generar modelo para la vista
-
-			request.setAttribute("libro", libro);
-		}
-
-		// 5. Redirigir a otra vista
-		request.getRequestDispatcher("/WEB-INF/vistas/libro.jsp").forward(request, response);
+		Dao<Libro> dao = LibroDaoTreeMap.getInstancia();
+		Iterable<Libro> libreria = dao.obtenerTodos();
+		request.setAttribute("libreria", libreria);
+		request.getRequestDispatcher("/WEB-INF/vistas/index.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -62,24 +48,23 @@ public class LibroServlet extends HttpServlet {
 			// 4. Generar modelo para la vista
 			request.setAttribute("libro", libro);
 			// 5. Redirigir a otra vista
-			request.getRequestDispatcher("/WEB-INF/vistas/libro.jsp").forward(request, response);
+			Dao<Libro> dao = LibroDaoTreeMap.getInstancia();
+			Iterable<Libro> libreria = dao.obtenerTodos();
+			request.setAttribute("libreria", libreria);
+
+			request.getRequestDispatcher("/WEB-INF/vistas/index.jsp").forward(request, response);
 			return;
 		}
 
 		Dao<Libro> dao = LibroDaoTreeMap.getInstancia();
 
-		String mensaje;
+		String mensaje = "";
 
 		if (libro.getId() == null) {
 			// Si no está rellenado el id, es que queremos añadir
 			dao.crear(libro);
 
-			mensaje = "Se ha creado el libro " + libro.getNombre() + " correctamente";
-		} else {
-			// Si está rellenado el id, es que queremos modificar
-			dao.modificar(libro);
-
-			mensaje = "Se ha modificado el libro " + libro.getNombre() + " correctamente";
+			mensaje = "Se ha creado el libro '" + libro.getNombre() + "' correctamente";
 		}
 
 		// 4. Generar modelo para la vista
@@ -88,8 +73,9 @@ public class LibroServlet extends HttpServlet {
 		request.setAttribute("alertaNivel", "success");
 
 		// 5. Redirigir a otra vista
+		doGet(request, response);
 
-		request.getRequestDispatcher("/principal").forward(request, response);
+		// request.getRequestDispatcher("/principal").forward(request, response);
 	}
 
 }

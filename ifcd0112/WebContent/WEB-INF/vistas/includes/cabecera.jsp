@@ -43,10 +43,6 @@
 					<li class="nav-item active"><a class="nav-link" href="#">Inicio
 							<span class="sr-only">(current)</span>
 					</a></li>
-					<c:if test="${sessionScope.usuario != null}">
-						<li class="nav-item"><a class="nav-link" href="admin/index">Mantenimiento
-								Libros</a></li>
-					</c:if>
 				</ul>
 				
 			</div>

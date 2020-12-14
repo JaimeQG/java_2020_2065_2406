@@ -10,12 +10,9 @@ public class LibroDaoTreeMap implements Dao<Libro> {
 	private static TreeMap<Long, Libro> libreria = new TreeMap<>();
 
 	static {
-		libreria.put(1L, new Libro(1L, "Crimen y Castigo", new BigDecimal("12.95"), 5));
-		libreria.put(2L, new Libro(2L, "Cien años de soledad", new BigDecimal("25.95"), 10));
-		libreria.put(3L, new Libro(3L, "Los santos inocentes", new BigDecimal("32.95"), 15));
-		libreria.put(4L, new Libro(4L, "Los favoritos de Midas", new BigDecimal("42.95"), 5));
-		libreria.put(5L, new Libro(5L, "El Quijote", new BigDecimal("59.95"), 2));
-		libreria.put(6L, new Libro(6L, "Hamlet", new BigDecimal("62.95"), 5));
+		libreria.put(1L, new Libro(1L, "El Quijote", new BigDecimal("12.95"), 5));
+		libreria.put(2L, new Libro(2L, "Hamlet", new BigDecimal("25.95"), 10));
+		libreria.put(3L, new Libro(3L, "Los favoritos de Midas", new BigDecimal("42.95"), 0));
 	}
 
 	// SINGLETON

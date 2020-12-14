@@ -28,13 +28,17 @@ public class Libro {
 		try {
 			setId(id.trim().length() != 0 ? Long.parseLong(id) : null);
 		} catch (NumberFormatException e) {
-			setErrorId("El id debe ser numérico");
+			setErrorId("BACKOFFICE: El id debe ser numérico");
 		}
 	}
 
 	private void setPrecio(String precio) {
 		try {
-			setPrecio(new BigDecimal(precio));
+			if ((precio.matches("\\d+\\.\\d\\d"))) {
+				setPrecio(new BigDecimal(precio));
+			} else {
+				setErrorPrecio("BACKOFFICE: El precio no tiene un formato correcto");
+			}
 		} catch (Exception e) {
 			setErrorPrecio("BACKOFFICE: El precio no tiene un formato correcto");
 		}

@@ -45,7 +45,11 @@ public class Libro {
 
 	private void setPrecio(String precio) {
 		try {
-			setPrecio(new BigDecimal(precio));
+			if ((precio.matches("\\d+\\.\\d\\d"))) {
+				setPrecio(new BigDecimal(precio));
+			} else {
+				setErrorPrecio("El precio no tiene un formato correcto");
+			}
 		} catch (Exception e) {
 			setErrorPrecio("El precio no tiene un formato correcto");
 		}
