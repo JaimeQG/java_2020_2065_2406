@@ -73,9 +73,10 @@ public class Libro {
 	}
 
 	public void setNombre(String nombre) {
-		if (nombre == null || nombre.trim().length() < 2 || !nombre.matches("^[A-Za-z0-9 -]+$")) {
+		if (nombre == null || nombre.trim().length() < 2 || nombre.trim().length() > 150
+				|| !nombre.matches("^[A-Za-z0-9 -]+$")) {
 			setErrorNombre(
-					"BACKOFFICE: Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 2 caracteres");
+					"BACKOFFICE: Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 2 caracteres (Máximo 150).");
 		}
 		this.nombre = nombre;
 	}

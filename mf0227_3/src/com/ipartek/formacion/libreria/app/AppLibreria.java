@@ -8,10 +8,11 @@ import com.ipartek.formacion.libreria.modelos.Libro;
 
 /**
  * Clase principal para ejecutar el Main y usar nuestra App. <br>
- * Se encarga de pedir datos por consola al usuario y llamara al MODELO( dao )
+ * Se encarga de pedir datos por consola al usuario y llamara al MODELO (dao)
  * para gestionar los Libros.
  * 
  * @author Jaime Quintana
+ * @version 1.0
  *
  */
 public class AppLibreria {
@@ -127,10 +128,9 @@ public class AppLibreria {
 			if (OP_SALIR.equalsIgnoreCase(nombre)) {
 				break; // salimos del bucle
 
-			} else { // comprobar nombre
+			} else { // comprobar nombre del libro
 
 				if (libroEliminar.getNombre().equalsIgnoreCase(nombre)) {
-
 					try {
 						libreria.eliminar(id);
 						flag = false;
@@ -142,12 +142,10 @@ public class AppLibreria {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 				} else {
-					System.out.println("**No coincide el nombre**");
+					System.out.println("**error: No coincide el nombre del libro**");
 				}
 			}
-
 		} while (flag);
 
 	}
@@ -167,9 +165,9 @@ public class AppLibreria {
 			e.printStackTrace();
 		}
 
-		do { // Precio libro
+		do {
 			try {
-				System.out.println("Introduzca precio del libro:  \n");
+				System.out.println("Introduzca precio del libro:  \n"); // Precio libro
 				String precioString = sc.nextLine();
 
 				if (precioString.matches("\\d+\\.\\d\\d")) {
@@ -180,13 +178,13 @@ public class AppLibreria {
 						isError = false;
 					}
 				} else {
-					System.out.println("**error: no es un numero valido");
+					System.out.println("**error: no es un número valido. Debe tener 2 decimales");
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("**error: no es un numero valido");
+				System.out.println("**error: no es un número valido");
 
 			} catch (Exception e) {
-				System.out.println("**error: no es un numero valido");
+				System.out.println("**error: no es un número valido");
 			}
 		} while (isError);
 
@@ -216,7 +214,7 @@ public class AppLibreria {
 			try {
 				libreria.crear(libroNuevo);
 				System.out.println("-------------------------------------");
-				System.out.println("Libro guardado");
+				System.out.println("Libro guardado correctamente");
 				System.out.println(libroNuevo);
 				System.out.println("-------------------------------------");
 				isError = false;
@@ -267,10 +265,8 @@ public class AppLibreria {
 					isError = false;
 				}
 			} catch (Exception e) {
-				// si quereis ver la traza de la Excepcion, usar e.printStackTrace()
 				System.out.println("**error, no es un numero valido");
 			}
-
 		} while (isError);
 
 		return intEntero;
@@ -292,9 +288,9 @@ public class AppLibreria {
 			System.out.println("Introduzca el " + propiedad + " del libro: \n");
 			nombre = sc.nextLine();
 			if (nombre.trim().length() < 2 || nombre.trim().length() > 150
-					|| !nombre.matches("^[A-Za-z0-9ñÑ\\. -]+$")) {
-				System.out.println("**error, el " + propiedad + " debe tener más de 2 letras y menos de 150. " + nombre
-						+ " tiene " + nombre.length() + " caracteres \n");
+					|| !nombre.matches("^[A-Za-z0-9ñÑ\\2. -]+$")) {
+				System.out.println("**error, el " + propiedad + " debe tener más de 2 letras y menos de 150. '" + nombre
+						+ "' tiene " + nombre.length() + " caracter(es) \n");
 			} else {
 				isError = false;
 			}

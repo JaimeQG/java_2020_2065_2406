@@ -90,8 +90,10 @@ public class Libro {
 	}
 
 	public void setNombre(String nombre) {
-		if (nombre == null || nombre.trim().length() < 2 || !nombre.matches("^[A-Za-z0-9 -]+$")) {
-			setErrorNombre("Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres");
+		if (nombre == null || nombre.trim().length() < 2 || nombre.trim().length() > 150
+				|| !nombre.matches("^[A-Za-z0-9ñÑ -]+$")) {
+			setErrorNombre(
+					"Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres (Máximo 150).");
 		}
 		this.nombre = nombre;
 	}
@@ -117,7 +119,7 @@ public class Libro {
 
 	public void setDescuento(Integer descuento) {
 		if (descuento != null && (descuento < 0 || descuento > 100)) {
-			setErrorDescuento("El descuento debe estar comprendido entre 0 y 100");
+			setErrorDescuento("El descuento debe estar comprendido entre 0 y 100.");
 		}
 		this.descuento = descuento;
 	}

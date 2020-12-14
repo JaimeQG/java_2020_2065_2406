@@ -48,6 +48,10 @@ public class LibroServlet extends HttpServlet {
 			// 4. Generar modelo para la vista
 			request.setAttribute("libro", libro);
 			// 5. Redirigir a otra vista
+
+			// Listado de los libros
+			// request.setAttribute("libreria",
+			// LibroDaoTreeMap.getInstancia().obtenerTodos());
 			Dao<Libro> dao = LibroDaoTreeMap.getInstancia();
 			Iterable<Libro> libreria = dao.obtenerTodos();
 			request.setAttribute("libreria", libreria);
