@@ -17,6 +17,8 @@ import com.ipartek.formacion.libreria.modelos.Libro;
  */
 public class AppLibreria {
 
+	static final private String NOMBRE_POJO = "Libro";
+
 	static final protected String OP_LISTAR = "1";
 	static final protected String OP_CREAR = "2";
 	static final protected String OP_ELIMINAR = "3";
@@ -33,7 +35,7 @@ public class AppLibreria {
 		System.out.println("*********  APP   LIBRERIA  *********");
 
 		do {
-			pintarMenu("Libro");
+			pintarMenu(NOMBRE_POJO);
 			System.out.println("Selecciona una opcion:");
 			opcion = sc.nextLine();
 
@@ -63,6 +65,12 @@ public class AppLibreria {
 
 	}
 
+	/**
+	 * Obtiene todos los libros ordenados Alfabeticamente
+	 * 
+	 * @return Collection<Libro>, si no existen libros Lista vacia pero no nula
+	 */
+
 	private static void listar() {
 
 		System.out.println("-------------------------------------");
@@ -83,6 +91,12 @@ public class AppLibreria {
 
 	}
 
+	/**
+	 * Eliminar un Libro por su identificador
+	 * 
+	 * @param id Long identificador
+	 * @return
+	 */
 	private static void eliminar() {
 
 		// Mostramos un listado con los libros
@@ -225,10 +239,10 @@ public class AppLibreria {
 	}
 
 	/**
-	 * Saca por pantalla el menú de opciones
+	 * Se encraga de pintar las pociones del menu.
 	 * 
-	 * @param
-	 * @return
+	 * @param nombrePojo nombre del recurso que se gestiona en esta App
+	 * 
 	 */
 	private static void pintarMenu(final String nombrePojo) {
 
@@ -288,7 +302,7 @@ public class AppLibreria {
 			System.out.println("Introduzca el " + propiedad + " del libro: \n");
 			nombre = sc.nextLine();
 			if (nombre.trim().length() < 2 || nombre.trim().length() > 150
-					|| !nombre.matches("^[A-Za-z0-9ñÑ\\2. -]+$")) {
+					|| !nombre.matches("^[A-Za-z0-9ñÑ\\. -]+$")) {
 				System.out.println("**error, el " + propiedad + " debe tener más de 2 letras y menos de 150. '" + nombre
 						+ "' tiene " + nombre.length() + " caracter(es) \n");
 			} else {
