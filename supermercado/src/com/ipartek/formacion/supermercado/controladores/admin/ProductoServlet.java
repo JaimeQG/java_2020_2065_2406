@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ipartek.formacion.supermercado.accesodatos.Dao;
-import com.ipartek.formacion.supermercado.accesodatos.ProductoDaoTreeMap;
+import com.ipartek.formacion.supermercado.controladores.Configuracion;
 import com.ipartek.formacion.supermercado.modelos.Producto;
 
 @WebServlet("/admin/producto")
@@ -30,7 +30,8 @@ public class ProductoServlet extends HttpServlet {
 		// 3. Tomar decisiones según lo recibido
 
 		if (id != null) {
-			Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
+			// Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
+			Dao<Producto> dao = Configuracion.daoProductos;
 
 			Producto producto = dao.obtenerPorId(Long.parseLong(id));
 
@@ -78,7 +79,8 @@ public class ProductoServlet extends HttpServlet {
 			return;
 		}
 
-		Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
+		// Dao<Producto> dao = ProductoDaoTreeMap.getInstancia();
+		Dao<Producto> dao = Configuracion.daoProductos;
 
 		String mensaje;
 
