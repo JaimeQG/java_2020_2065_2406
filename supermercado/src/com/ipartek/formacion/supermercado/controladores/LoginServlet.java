@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.formacion.supermercado.accesodatos.UsuarioDaoTreeMap;
+import com.ipartek.formacion.supermercado.accesodatos.DaoUsuario;
 import com.ipartek.formacion.supermercado.modelos.Usuario;
 
 @WebServlet("/login")
@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		UsuarioDaoTreeMap dao = UsuarioDaoTreeMap.getInstancia();
+		DaoUsuario dao = Configuracion.daoUsuarios;
 		Usuario usuario = dao.obtenerPorEmail(email);
 
 		if (usuario != null && usuario.getPassword().equals(password)) {
