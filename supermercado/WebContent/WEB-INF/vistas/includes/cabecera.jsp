@@ -44,6 +44,8 @@
 					<c:if test="${sessionScope.usuario != null}">
 						<li class="nav-item"><a class="nav-link" href="admin/index">Mantenimiento
 								Productos</a></li>
+						<li class="nav-item"><a class="nav-link" href="admin/maestro">Mantenimiento
+								Clientes</a></li>
 					</c:if>
 				</ul>
 				<ul class="navbar-nav">
