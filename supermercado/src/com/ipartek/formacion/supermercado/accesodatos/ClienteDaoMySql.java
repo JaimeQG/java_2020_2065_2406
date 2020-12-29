@@ -1,6 +1,7 @@
 package com.ipartek.formacion.supermercado.accesodatos;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,8 +20,8 @@ public class ClienteDaoMySql implements Dao<Cliente> {
 	private static final String SQL_SELECT = "SELECT * FROM clientes";
 	private static final String SQL_SELECT_ID = "SELECT * FROM clientes WHERE id = ?";
 
-	private static final String SQL_INSERT = "INSERT INTO clientes (nombre, apellidos, cif) VALUES (?, ?, ?)";
-	private static final String SQL_UPDATE = "UPDATE usuarios SET email = ?, password = ? WHERE id = ?";
+	private static final String SQL_INSERT = "INSERT INTO clientes (nombre, apellidos, cif, fecha_nacimiento) VALUES (?, ?, ?, ?)";
+	private static final String SQL_UPDATE = "UPDATE clientes SET nombre = ?, apellidos = ?, cif = ?, fecha_nacimiento = ? WHERE id = ?";
 	private static final String SQL_DELETE = "DELETE FROM clientes WHERE id = ?";
 
 	static {
@@ -95,7 +96,13 @@ public class ClienteDaoMySql implements Dao<Cliente> {
 			ps.setString(1, cliente.getNombre());
 			ps.setString(2, cliente.getApellidos());
 			ps.setString(3, cliente.getCif());
-			// ps.setDate(4, Date.valueOf(cliente.getFechaNacimiento()));
+
+			Date fecha = null;
+			if (cliente.getFechaNacimiento() != null) {
+				fecha = Date.valueOf(cliente.getFechaNacimiento());
+			}
+
+			ps.setDate(4, fecha);
 
 			int numeroRegistrosInsertados = ps.executeUpdate();
 
@@ -109,8 +116,30 @@ public class ClienteDaoMySql implements Dao<Cliente> {
 	}
 
 	@Override
-	public void modificar(Cliente objeto) {
-		// TODO Auto-generated method stub
+	public void modificar(Cliente cliente) {
+		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement ps = con.prepareStatement(SQL_UPDATE);) {
+
+			ps.setString(1, cliente.getNombre());
+			ps.setString(2, cliente.getApellidos());
+			ps.setString(3, cliente.getCif());
+
+			Date fecha = null;
+			if (cliente.getFechaNacimiento() != null) {
+				fecha = Date.valueOf(cliente.getFechaNacimiento());
+			}
+
+			ps.setDate(4, fecha);
+			ps.setLong(5, cliente.getId());
+
+			int numeroRegistrosModificados = ps.executeUpdate();
+
+			if (numeroRegistrosModificados != 1) {
+				throw new AccesoDatosException("Se han modificado " + numeroRegistrosModificados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido modificar el cliente " + cliente, e);
+		}
 
 	}
 
