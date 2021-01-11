@@ -9,6 +9,7 @@
 			<tr>
 				<th scope="col">Id</th>
 				<th scope="col">Nombre</th>
+				<th scope="col">Departamento</th>
 				<th scope="col">Imagen</th>
 				<th scope="col">Descripción</th>
 				<th scope="col">Precio</th>
@@ -24,7 +25,8 @@
 				<tr>
 					<th scope="row">${producto.id}</th>
 					<td>${producto.nombre}</td>
-					<td><img src="${producto.urlImagen}" alt="" style="height: 3em" /></td>
+					<td>${producto.departamento.nombre}</td>
+					<td><img src="productimgs/${producto.urlImagen}" alt="" style="height: 3em" /></td>
 					<td>${producto.descripcion}</td>
 					<td><fmt:formatNumber type="currency" value="${producto.precio}" /></td>
 					<td>${producto.cantidad}</td>

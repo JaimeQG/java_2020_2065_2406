@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ipartek.formacion.supermercado.accesodatos.ProductoDaoMySql;
+import com.ipartek.formacion.supermercado.accesodatos.Dao;
+import com.ipartek.formacion.supermercado.controladores.Configuracion;
+import com.ipartek.formacion.supermercado.modelos.Producto;
 
 /**
  * Servlet implementation class IndexServlet
@@ -21,7 +23,10 @@ public class IndexServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// request.setAttribute("productos",
 		// ProductoDaoTreeMap.getInstancia().obtenerTodos());
-		request.setAttribute("productos", ProductoDaoMySql.getInstancia().obtenerTodos());
+		// request.setAttribute("productos",
+		// ProductoDaoMySql.getInstancia().obtenerTodos());
+		Dao<Producto> dao = Configuracion.daoProductos;
+		request.setAttribute("productos", dao.obtenerTodos());
 		request.getRequestDispatcher("/WEB-INF/vistas/admin/index.jsp").forward(request, response);
 	}
 

@@ -4,9 +4,10 @@
 
 <h1>Edición de producto</h1>
 
-<form action="" method="post" class="needs-validation" novalidate>
+<form action="" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
 	<%--<input type="hidden" name="id" value="" />--%>
 
+	<!-- Id -->
 	<div class="form-group row">
 		<label for="id" class="col-md-4 col-lg-3 col-form-label">Id</label>
 		<div class="col">
@@ -16,7 +17,24 @@
 			<div class="invalid-feedback">${producto.errorId}</div>
 		</div>
 	</div>
+	
+	<!-- Departamento -->
+	<div class="form-group row">
+		<label for="departamento" class="col-md-4 col-lg-3 col-form-label">Departamento</label>
+		<div class="col">
+			<select class="form-control ${producto.errorDepartamento != null ? 'is-invalid' : '' }" id="departamento" name="departamento">
+				<option value="0">Introduzca el departamento</option>
+				
+				<c:forEach items="${departamentos}" var="departamento">
+					<option value="${departamento.id}" ${departamento.id == producto.departamento.id ? 'selected' : ''}>${departamento.nombre}</option>
+				</c:forEach>
+			</select>
+			<div class="valid-feedback">Departamento correcto</div>
+			<div class="invalid-feedback">${producto.errorDepartamento != null ? producto.errorDepartamento : 'Es obligatorio introducir el departamento'}</div>
+		</div>
+	</div>
 
+	<!-- Nombre -->
 	<div class="form-group row">
 		<label for="nombre" class="col-md-4 col-lg-3  col-form-label">Nombre</label>
 		<div class="col">
@@ -33,11 +51,8 @@
 	<div class="form-group row">
 		<label for="imagen" class="col-md-4 col-lg-3 col-form-label">Imagen</label>
 		<div class="col">
-			<div class="custom-file">
-				<input type="file" class="custom-file-input" id="imagen" value="${producto.urlImagen}"
-					name="imagen" lang="es"> <label class="custom-file-label"
-					for="imagen" data-browse="Elegir">${producto.urlImagen != null ? producto.urlImagen : 'Seleccionar Archivo' }</label>
-			</div>
+			<input type="url" class="form-control" id="imagen" name="imagen"
+				placeholder="URL de la imagen a mostrar del producto" value="${producto.urlImagen}">
 			<div class="valid-feedback">Imagen correcta</div>
 			<div class="invalid-feedback"></div>
 		</div>
@@ -47,8 +62,11 @@
 	<div class="form-group row">
 		<label for="imagen" class="col-md-4 col-lg-3 col-form-label">Imagen</label>
 		<div class="col">
-			<input type="url" class="form-control" id="imagen" name="imagen"
-				placeholder="URL de la imagen a mostrar del producto" value="${producto.urlImagen}">
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" id="imagen" value="${producto.urlImagen}"
+					name="imagen" lang="es"> <label class="custom-file-label"
+					for="imagen" data-browse="Elegir">${producto.urlImagen != null ? producto.urlImagen : 'Seleccionar Archivo' }</label>
+			</div>
 			<div class="valid-feedback">Imagen correcta</div>
 			<div class="invalid-feedback"></div>
 		</div>

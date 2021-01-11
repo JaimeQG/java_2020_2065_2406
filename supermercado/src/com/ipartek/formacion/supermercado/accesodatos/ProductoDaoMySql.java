@@ -8,20 +8,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.ipartek.formacion.supermercado.modelos.Departamento;
 import com.ipartek.formacion.supermercado.modelos.Producto;
 
 public class ProductoDaoMySql implements Dao<Producto> {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/supermercado?serverTimezone=UTC";
 	private static final String USER = "root";
-	private static final String PASS = "";
+	private static final String PASS = "admin";
 
-	private static final String SQL_SELECT = "SELECT * FROM productos";
-	private static final String SQL_SELECT_ID = "SELECT * FROM productos WHERE id = ?";
+	private static final String SQL_SELECT = "SELECT * FROM productos p JOIN departamentos d ON p.departamentos_id = d.id;";
+	private static final String SQL_SELECT_ID = "SELECT * FROM productos p JOIN departamentos d ON p.departamentos_id = d.id WHERE p.id = ?";
 
-	private static final String SQL_INSERT = "INSERT INTO usuarios (email, password) VALUES (?, ?)";
-	private static final String SQL_UPDATE = "UPDATE usuarios SET email = ?, password = ? WHERE id = ?";
-	private static final String SQL_DELETE = "DELETE facturas_has_productos, productos FROM productos JOIN facturas_has_productos ON productos.id=facturas_has_productos.productos_id WHERE productos.id = ?";
+	private static final String SQL_INSERT = "INSERT INTO productos "
+			+ "(nombre, descripcion, url_imagen, precio, descuento, unidad_medida, precio_unidad_medida, cantidad, departamentos_id) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String SQL_UPDATE = "UPDATE productos SET nombre = ?, descripcion = ?, url_imagen = ?, precio = ?, descuento = ?, unidad_medida = ?, precio_unidad_medida = ?, cantidad = ?, departamentos_id = ? WHERE id = ?";
+	private static final String SQL_DELETE = "DELETE FROM productos WHERE id = ?";
 
 	static {
 		try {
@@ -52,10 +55,17 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 			ArrayList<Producto> productos = new ArrayList<>();
 			Producto producto;
+			Departamento departamento;
 
 			while (rs.next()) {
 
 				producto = mapper(rs);
+
+				departamento = new Departamento(rs.getLong("d.id"), rs.getString("d.nombre"),
+						rs.getString("d.descripcion"));
+
+				producto.setDepartamento(departamento);
+
 				productos.add(producto);
 			}
 
@@ -74,29 +84,74 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 			try (ResultSet rs = ps.executeQuery()) {
 				Producto producto = null;
+				Departamento departamento;
 
 				if (rs.next()) {
 					producto = mapper(rs);
+
+					departamento = new Departamento(rs.getLong("d.id"), rs.getString("d.nombre"),
+							rs.getString("d.descripcion"));
+
+					producto.setDepartamento(departamento);
 				}
 
 				return producto;
 			}
 
 		} catch (SQLException e) {
-			throw new AccesoDatosException("No se ha podido recibir el usuario " + id, e);
+			throw new AccesoDatosException("No se ha podido recibir el producto " + id, e);
 		}
 	}
 
 	@Override
-	public void crear(Producto objeto) {
-		// TODO Auto-generated method stub
+	public void crear(Producto producto) {
+		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement ps = con.prepareStatement(SQL_INSERT);) {
 
+			ps.setString(1, producto.getNombre());
+			ps.setString(2, producto.getDescripcion());
+			ps.setString(3, producto.getUrlImagen());
+			ps.setBigDecimal(4, producto.getPrecio());
+			ps.setInt(5, producto.getDescuento());
+			ps.setString(6, producto.getUnidadMedida());
+			ps.setBigDecimal(7, producto.getPrecioUnidadMedida());
+			ps.setInt(8, producto.getCantidad());
+			ps.setLong(9, producto.getDepartamento().getId());
+
+			int numeroRegistrosInsertados = ps.executeUpdate();
+
+			if (numeroRegistrosInsertados != 1) {
+				throw new AccesoDatosException("Se han insertado " + numeroRegistrosInsertados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido insertar el producto " + producto, e);
+		}
 	}
 
 	@Override
-	public void modificar(Producto objeto) {
-		// TODO Auto-generated method stub
+	public void modificar(Producto producto) {
+		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+				PreparedStatement ps = con.prepareStatement(SQL_UPDATE);) {
 
+			ps.setString(1, producto.getNombre());
+			ps.setString(2, producto.getDescripcion());
+			ps.setString(3, producto.getUrlImagen());
+			ps.setBigDecimal(4, producto.getPrecio());
+			ps.setInt(5, producto.getDescuento());
+			ps.setString(6, producto.getUnidadMedida());
+			ps.setBigDecimal(7, producto.getPrecioUnidadMedida());
+			ps.setInt(8, producto.getCantidad());
+			ps.setLong(9, producto.getDepartamento().getId());
+			ps.setLong(10, producto.getId());
+
+			int numeroRegistrosModificados = ps.executeUpdate();
+
+			if (numeroRegistrosModificados != 1) {
+				throw new AccesoDatosException("Se han modificado " + numeroRegistrosModificados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido modificar el producto " + producto, e);
+		}
 	}
 
 	@Override
@@ -114,7 +169,6 @@ public class ProductoDaoMySql implements Dao<Producto> {
 		} catch (SQLException e) {
 			throw new AccesoDatosException("No se ha podido borrar el producto " + id, e);
 		}
-
 	}
 
 	/**
