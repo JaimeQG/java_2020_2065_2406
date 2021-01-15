@@ -70,10 +70,11 @@ public class ProductoServlet extends HttpServlet {
 
 		String id = request.getParameter("id");
 		String nombre = request.getParameter("nombre");
-
+		// Departamento
 		String departamentoId = request.getParameter("departamento");
 
 		String urlImagen = null; // = request.getParameter("imagen");
+		String urlImagenAnterior = request.getParameter("imagenAnterior");
 		String descripcion = request.getParameter("descripcion");
 		String precio = request.getParameter("precio");
 		String cantidad = request.getParameter("cantidad");
@@ -90,10 +91,15 @@ public class ProductoServlet extends HttpServlet {
 
 			if (nombreFichero != null && nombreFichero.trim().length() > 0) {
 				LOGGER.info("Nombre de fichero ACEPTADO: [" + nombreFichero + "]");
+				LOGGER.info(uploadPath + File.separator + nombreFichero);
 				part.write(uploadPath + File.separator + nombreFichero);
 
 				urlImagen = nombreFichero;
 			}
+		}
+
+		if (urlImagen == null) {
+			urlImagen = urlImagenAnterior;
 		}
 
 		// 2. Poner información dentro de un modelo
@@ -101,7 +107,19 @@ public class ProductoServlet extends HttpServlet {
 		Producto producto = new Producto(id, nombre, descripcion, urlImagen, precio, descuento, unidadMedida,
 				precioUnidadMedida, cantidad);
 
-		producto.setDepartamento(new Departamento(Long.parseLong(departamentoId), null, null));
+		Long departamentoIdLong = Long.parseLong(departamentoId);
+
+		if (departamentoIdLong == -1) {
+			String nombreDepartamento = request.getParameter("departamento-nombre");
+			String descripcionDepartamento = request.getParameter("departamento-descripcion");
+
+			Departamento departamento = Configuracion.daoDepartamentos
+					.crearYObtener(new Departamento(null, nombreDepartamento, descripcionDepartamento));
+
+			departamentoIdLong = departamento.getId();
+		}
+
+		producto.setDepartamento(new Departamento(departamentoIdLong, null, null));
 
 		LOGGER.log(Level.INFO, producto.toString());
 
@@ -111,9 +129,14 @@ public class ProductoServlet extends HttpServlet {
 			// 4. Generar modelo para la vista
 			request.setAttribute("producto", producto);
 
-			Iterable<Departamento> departamentos = Configuracion.daoDepartamentos.obtenerTodos();
+			Dao<Departamento> dao = Configuracion.daoDepartamentos;
+			Iterable<Departamento> departamentos = dao.obtenerTodos();
+
+			// Iterable<Departamento> departamentos =
+			// Configuracion.daoDepartamentos.obtenerTodos();
 
 			request.setAttribute("departamentos", departamentos);
+
 			// 5. Redirigir a otra vista
 			request.getRequestDispatcher("/WEB-INF/vistas/admin/producto.jsp").forward(request, response);
 			return;

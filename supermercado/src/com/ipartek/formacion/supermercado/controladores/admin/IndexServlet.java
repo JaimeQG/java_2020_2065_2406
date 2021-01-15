@@ -21,12 +21,17 @@ public class IndexServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String borrados = request.getParameter("borrados");
 		// request.setAttribute("productos",
 		// ProductoDaoTreeMap.getInstancia().obtenerTodos());
 		// request.setAttribute("productos",
 		// ProductoDaoMySql.getInstancia().obtenerTodos());
 		Dao<Producto> dao = Configuracion.daoProductos;
-		request.setAttribute("productos", dao.obtenerTodos());
+
+		Iterable<Producto> productos = borrados != null ? dao.obtenerBorrados() : dao.obtenerTodos();
+
+		request.setAttribute("borrados", borrados);
+		request.setAttribute("productos", productos);
 		request.getRequestDispatcher("/WEB-INF/vistas/admin/index.jsp").forward(request, response);
 	}
 

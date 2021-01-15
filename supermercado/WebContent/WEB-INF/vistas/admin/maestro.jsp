@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/vistas/includes/cabecera.jsp"%>
 
+<h3>Mantenimiento Clientes</h3>
+
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover table-sm">
 		<caption>Listado de productos</caption>

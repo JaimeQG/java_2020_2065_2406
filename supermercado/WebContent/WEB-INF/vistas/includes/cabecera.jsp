@@ -28,7 +28,8 @@
 <body>
 	<header class="sticky-top">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">Supermercado</a>
+		<a class="navbar-brand" href="#"><i class="d-inline-block align-middle pr-2 fa fa-shopping-cart"></i>Supermercado</a>
+			<!--  <a class="navbar-brand" href="#">Supermercado</a> <i class="fa fa-shopping-cart" aria-hidden="true"></i> -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#menuprincipal"
 				aria-controls="menuprincipal" aria-expanded="false"
@@ -42,11 +43,25 @@
 							<span class="sr-only">(current)</span>
 					</a></li>
 					<c:if test="${sessionScope.usuario != null}">
+					<!--
 						<li class="nav-item"><a class="nav-link" href="admin/index">Mantenimiento
 								Productos</a></li>
 						<li class="nav-item"><a class="nav-link" href="admin/maestro">Mantenimiento
 								Clientes</a></li>
-					</c:if>
+					
+					-->
+					  	<li class="nav-item dropdown">
+        					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          					Mantenimientos
+        					</a>
+       						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          						<a class="dropdown-item" href="admin/index">Productos</a>
+          						<a class="dropdown-item" href="admin/maestro">Clientes</a>
+         				 		<div class="dropdown-divider"></div>
+          						<a class="dropdown-item" href="#">Departamentos</a>
+        					</div>
+      					</li>
+      				</c:if>
 				</ul>
 				<ul class="navbar-nav">
 					<li class="nav-item"><a class="nav-link" href="carrito">Ver

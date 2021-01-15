@@ -122,7 +122,8 @@ public class Producto implements Serializable {
 
 	public void setNombre(String nombre) {
 		if (nombre == null || nombre.trim().length() < 3 || !nombre.matches("\\p{Lu}\\p{Ll}{2}[\\p{Ll} ]*")) {
-			setErrorNombre("Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres");
+			setErrorNombre(
+					"MSG-SERVER: Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo 3 caracteres");
 		}
 		this.nombre = nombre;
 	}
@@ -140,6 +141,9 @@ public class Producto implements Serializable {
 	}
 
 	public void setUrlImagen(String urlImagen) {
+		if (urlImagen == null) {
+			urlImagen = "";
+		}
 		this.urlImagen = urlImagen;
 	}
 
@@ -212,6 +216,7 @@ public class Producto implements Serializable {
 		return precio.subtract(precio.multiply(new BigDecimal(descuento).divide(new BigDecimal(100))));
 	}
 
+	// Departamento: getters y setters
 	public Departamento getDepartamento() {
 		return departamento;
 	}

@@ -4,6 +4,8 @@
 
 <h1>Edición de producto</h1>
 
+<!-- ${producto} -->
+
 <form action="" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
 	<%--<input type="hidden" name="id" value="" />--%>
 
@@ -18,22 +20,6 @@
 		</div>
 	</div>
 	
-	<!-- Departamento -->
-	<div class="form-group row">
-		<label for="departamento" class="col-md-4 col-lg-3 col-form-label">Departamento</label>
-		<div class="col">
-			<select class="form-control ${producto.errorDepartamento != null ? 'is-invalid' : '' }" id="departamento" name="departamento">
-				<option value="0">Introduzca el departamento</option>
-				
-				<c:forEach items="${departamentos}" var="departamento">
-					<option value="${departamento.id}" ${departamento.id == producto.departamento.id ? 'selected' : ''}>${departamento.nombre}</option>
-				</c:forEach>
-			</select>
-			<div class="valid-feedback">Departamento correcto</div>
-			<div class="invalid-feedback">${producto.errorDepartamento != null ? producto.errorDepartamento : 'Es obligatorio introducir el departamento'}</div>
-		</div>
-	</div>
-
 	<!-- Nombre -->
 	<div class="form-group row">
 		<label for="nombre" class="col-md-4 col-lg-3  col-form-label">Nombre</label>
@@ -44,6 +30,51 @@
 			<div class="valid-feedback">Nombre correcto</div>
 			<div class="invalid-feedback">${producto.errorNombre != null ? producto.errorNombre : 'Debe introducir un nombre con
 				como mínimo 3 letras, y solo letras y mayúscula la primera'}</div>
+		</div>
+	</div>
+	
+	<!-- Departamento -->
+	<div class="form-group row">
+		<label for="departamento" class="col-md-4 col-lg-3 col-form-label">Departamento</label>
+		<div class="col">
+			<select class="form-control ${producto.errorDepartamento != null ? 'is-invalid' : '' }" id="departamento" name="departamento"
+			onchange="if(this.value == -1) { $('.departamento').show() } else { $('.departamento').hide() }">
+				<option value="0">Introduzca el departamento</option>
+				
+				<!-- producto.departamento.id -->
+				<!-- ${producto.departamento.id} -->
+				<!-- producto.departamento.nombre -->
+				<!-- ${producto.departamento.nombre} -->
+				<!-- ${departamentos} -->
+				
+				<c:forEach items="${departamentos}" var="departamento">
+					<option value="${departamento.id}" ${departamento.id == producto.departamento.id ? 'selected' : ''}>${departamento.nombre}</option>
+				</c:forEach>
+				
+				<option value="-1">AÑADIR DEPARTAMENTO</option>
+			</select>
+			<div class="valid-feedback">Departamento correcto</div>
+			<div class="invalid-feedback">${producto.errorDepartamento != null ? producto.errorDepartamento : 'Es obligatorio introducir el departamento'}</div>
+		</div>
+	</div>
+	
+	<div class="form-group row departamento" style="display: none">
+		<label for="departamento-nombre" class="col-md-4 col-lg-3  col-form-label">Nombre de Departamento</label>
+		<div class="col">
+			<input type="text" class="form-control" id="departamento-nombre" name="departamento-nombre"
+				minlength="3" pattern="\p{Lu}\p{Ll}{2}[\p{Ll}]*"
+				placeholder="Debe introducir un nombre con solo letras y mayúscula la primera. Mínimo tres caracteres.">
+			<div class="valid-feedback">Nombre correcto</div>
+			<div class="invalid-feedback">Debe introducir un nombre con
+				como mínimo 3 letras, y solo letras y mayúscula la primera</div>
+		</div>
+	</div>
+	
+	<div class="form-group row departamento" style="display: none">
+		<label for="departamento-descripcion" class="col-md-4 col-lg-3  col-form-label">Descripción de Departamento</label>
+		<div class="col">
+			<textarea class="form-control" id="departamento-descripcion" name="departamento-descripcion"></textarea>
+			<div class="valid-feedback">Descripción correcta</div>
 		</div>
 	</div>
 
@@ -66,11 +97,14 @@
 				<input type="file" class="custom-file-input" id="imagen" value="${producto.urlImagen}"
 					name="imagen" lang="es"> <label class="custom-file-label"
 					for="imagen" data-browse="Elegir">${producto.urlImagen != null ? producto.urlImagen : 'Seleccionar Archivo' }</label>
+				<button class="btn btn-danger" type="button" onclick="$('.custom-file [for=imagen]').text('');$('[name=imagenAnterior]').val('')">Borrar imagen</button>
 			</div>
 			<div class="valid-feedback">Imagen correcta</div>
 			<div class="invalid-feedback"></div>
 		</div>
 	</div>
+	
+	<input type="hidden" name="imagenAnterior" value="${producto.urlImagen}"/>
 	
 	<div class="form-group row">
 		<label for="descripcion" class="col-md-4 col-lg-3 col-form-label">Descripción</label>
@@ -82,6 +116,7 @@
 		</div>
 	</div>
 
+	<!-- Precio -->
 	<div class="form-group row">
 		<label for="precio" class="col-md-4 col-lg-3 col-form-label">Precio</label>
 		<div class="input-group col">
@@ -97,6 +132,7 @@
 		</div>
 	</div>
 
+	<!-- Cantidad -->
 	<div class="form-group row">
 		<label for="cantidad" class="col-md-4 col-lg-3 col-form-label">Cantidad</label>
 		<div class="col">
@@ -107,6 +143,7 @@
 		</div>
 	</div>
 
+	<!-- Unidad Medida -->
 	<div class="form-group row">
 		<label for="unidad-medida" class="col-md-4 col-lg-3 col-form-label">Unidad de medida</label>
 		<div class="col">
@@ -116,6 +153,7 @@
 		</div>
 	</div>
 	
+	<!-- Precio Unidad Medida -->
 	<div class="form-group row">
 		<label for="precio-unidad-medida" class="col-md-4 col-lg-3 col-form-label">Precio por unidad de medida</label>
 		<div class="input-group col">
@@ -131,6 +169,7 @@
 		</div>
 	</div>
 	
+	<!-- Descuento -->
 	<div class="form-group row">
 		<label for="descuento" class="col-md-4 col-lg-3 col-form-label">Descuento</label>
 		<div class="input-group col">

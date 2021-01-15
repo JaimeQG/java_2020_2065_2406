@@ -1,42 +1,42 @@
 package com.ipartek.formacion.supermercado.accesodatos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import com.ipartek.formacion.supermercado.modelos.Departamento;
 import com.ipartek.formacion.supermercado.modelos.Producto;
 
 public class ProductoDaoMySql implements Dao<Producto> {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/supermercado?serverTimezone=UTC";
-	private static final String USER = "root";
-	private static final String PASS = "admin";
+	private static final String SQL_SELECT = "{call productos_obtener_todos()}";
+	private static final String SQL_SELECT_BORRADOS = "{call productos_obtener_borrados()}";
+	private static final String SQL_SELECT_ID = "{call productos_obtener_por_id(?)}";
 
-	private static final String SQL_SELECT = "SELECT * FROM productos p JOIN departamentos d ON p.departamentos_id = d.id;";
-	private static final String SQL_SELECT_ID = "SELECT * FROM productos p JOIN departamentos d ON p.departamentos_id = d.id WHERE p.id = ?";
+	private static final String SQL_INSERT = "{call productos_insertar(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+	private static final String SQL_UPDATE = "{call productos_modificar(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+	private static final String SQL_DELETE = "{call productos_borrar(?)}";
+	private static final String SQL_UNDELETE = "{call productos_recuperar(?)}";
 
-	private static final String SQL_INSERT = "INSERT INTO productos "
-			+ "(nombre, descripcion, url_imagen, precio, descuento, unidad_medida, precio_unidad_medida, cantidad, departamentos_id) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String SQL_UPDATE = "UPDATE productos SET nombre = ?, descripcion = ?, url_imagen = ?, precio = ?, descuento = ?, unidad_medida = ?, precio_unidad_medida = ?, cantidad = ?, departamentos_id = ? WHERE id = ?";
-	private static final String SQL_DELETE = "DELETE FROM productos WHERE id = ?";
-
-	static {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			throw new AccesoDatosException("No se ha encontrado el driver de JDBC para MySQL", e);
-		}
-	}
+	private DataSource dataSource;
 
 	// SINGLETON
 
 	private ProductoDaoMySql() {
+		try {
+			InitialContext initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			dataSource = (DataSource) envCtx.lookup("jdbc/supermercado");
+		} catch (NamingException e) {
+			throw new AccesoDatosException("No se ha encontrado el JNDI de supermercado", e);
+		}
 	}
 
 	private final static ProductoDaoMySql INSTANCIA = new ProductoDaoMySql();
@@ -47,11 +47,28 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 	// FIN SINGLETON
 
+	private Connection obtenerConexion() {
+		try {
+			return dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new AccesoDatosException("Ha habido un error al obtener la conexión", e);
+		}
+	}
+
 	@Override
 	public Iterable<Producto> obtenerTodos() {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-				Statement s = con.createStatement();
-				ResultSet rs = s.executeQuery(SQL_SELECT)) {
+		return obtenerRegistros(SQL_SELECT);
+	}
+
+	@Override
+	public Iterable<Producto> obtenerBorrados() {
+		return obtenerRegistros(SQL_SELECT_BORRADOS);
+	}
+
+	private Iterable<Producto> obtenerRegistros(String consulta) {
+		try (Connection con = obtenerConexion();
+				CallableStatement cs = con.prepareCall(consulta);
+				ResultSet rs = cs.executeQuery()) {
 
 			ArrayList<Producto> productos = new ArrayList<>();
 			Producto producto;
@@ -60,6 +77,13 @@ public class ProductoDaoMySql implements Dao<Producto> {
 			while (rs.next()) {
 
 				producto = mapper(rs);
+				/*
+				 * producto = new Producto(rs.getLong("p.id"), rs.getString("p.nombre"),
+				 * rs.getString("p.descripcion"), rs.getString("p.url_imagen"),
+				 * rs.getBigDecimal("p.precio"), rs.getInt("p.descuento"),
+				 * rs.getString("p.unidad_medida"), rs.getBigDecimal("p.precio_unidad_medida"),
+				 * rs.getInt("p.cantidad"));
+				 */
 
 				departamento = new Departamento(rs.getLong("d.id"), rs.getString("d.nombre"),
 						rs.getString("d.descripcion"));
@@ -71,23 +95,25 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 			return productos;
 		} catch (SQLException e) {
-			throw new AccesoDatosException("No se ha podido consultar la lista de productos", e);
+			throw new AccesoDatosException("No se ha podido consultar la lista de producto", e);
 		}
 	}
 
 	@Override
 	public Producto obtenerPorId(Long id) {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement ps = con.prepareStatement(SQL_SELECT_ID);) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_SELECT_ID);) {
 
-			ps.setLong(1, id);
+			cs.setLong(1, id);
 
-			try (ResultSet rs = ps.executeQuery()) {
+			try (ResultSet rs = cs.executeQuery()) {
 				Producto producto = null;
 				Departamento departamento;
 
 				if (rs.next()) {
-					producto = mapper(rs);
+					producto = new Producto(rs.getLong("id"), rs.getString("nombre"), rs.getString("descripcion"),
+							rs.getString("url_imagen"), rs.getBigDecimal("precio"), rs.getInt("descuento"),
+							rs.getString("unidad_medida"), rs.getBigDecimal("precio_unidad_medida"),
+							rs.getInt("cantidad"));
 
 					departamento = new Departamento(rs.getLong("d.id"), rs.getString("d.nombre"),
 							rs.getString("d.descripcion"));
@@ -105,20 +131,19 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 	@Override
 	public void crear(Producto producto) {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement ps = con.prepareStatement(SQL_INSERT);) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_INSERT);) {
 
-			ps.setString(1, producto.getNombre());
-			ps.setString(2, producto.getDescripcion());
-			ps.setString(3, producto.getUrlImagen());
-			ps.setBigDecimal(4, producto.getPrecio());
-			ps.setInt(5, producto.getDescuento());
-			ps.setString(6, producto.getUnidadMedida());
-			ps.setBigDecimal(7, producto.getPrecioUnidadMedida());
-			ps.setInt(8, producto.getCantidad());
-			ps.setLong(9, producto.getDepartamento().getId());
+			cs.setString(1, producto.getNombre());
+			cs.setString(2, producto.getDescripcion());
+			cs.setString(3, producto.getUrlImagen());
+			cs.setBigDecimal(4, producto.getPrecio());
+			cs.setInt(5, producto.getDescuento());
+			cs.setString(6, producto.getUnidadMedida());
+			cs.setBigDecimal(7, producto.getPrecioUnidadMedida());
+			cs.setInt(8, producto.getCantidad());
+			cs.setLong(9, producto.getDepartamento().getId());
 
-			int numeroRegistrosInsertados = ps.executeUpdate();
+			int numeroRegistrosInsertados = cs.executeUpdate();
 
 			if (numeroRegistrosInsertados != 1) {
 				throw new AccesoDatosException("Se han insertado " + numeroRegistrosInsertados + " registros");
@@ -130,21 +155,20 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 	@Override
 	public void modificar(Producto producto) {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement ps = con.prepareStatement(SQL_UPDATE);) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_UPDATE);) {
 
-			ps.setString(1, producto.getNombre());
-			ps.setString(2, producto.getDescripcion());
-			ps.setString(3, producto.getUrlImagen());
-			ps.setBigDecimal(4, producto.getPrecio());
-			ps.setInt(5, producto.getDescuento());
-			ps.setString(6, producto.getUnidadMedida());
-			ps.setBigDecimal(7, producto.getPrecioUnidadMedida());
-			ps.setInt(8, producto.getCantidad());
-			ps.setLong(9, producto.getDepartamento().getId());
-			ps.setLong(10, producto.getId());
+			cs.setString(1, producto.getNombre());
+			cs.setString(2, producto.getDescripcion());
+			cs.setString(3, producto.getUrlImagen());
+			cs.setBigDecimal(4, producto.getPrecio());
+			cs.setInt(5, producto.getDescuento());
+			cs.setString(6, producto.getUnidadMedida());
+			cs.setBigDecimal(7, producto.getPrecioUnidadMedida());
+			cs.setInt(8, producto.getCantidad());
+			cs.setLong(9, producto.getDepartamento().getId());
+			cs.setLong(10, producto.getId());
 
-			int numeroRegistrosModificados = ps.executeUpdate();
+			int numeroRegistrosModificados = cs.executeUpdate();
 
 			if (numeroRegistrosModificados != 1) {
 				throw new AccesoDatosException("Se han modificado " + numeroRegistrosModificados + " registros");
@@ -156,18 +180,33 @@ public class ProductoDaoMySql implements Dao<Producto> {
 
 	@Override
 	public void eliminar(Long id) {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
-				PreparedStatement ps = con.prepareStatement(SQL_DELETE);) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_DELETE);) {
 
-			ps.setLong(1, id);
+			cs.setLong(1, id);
 
-			int numeroRegistrosBorrados = ps.executeUpdate();
+			int numeroRegistrosBorrados = cs.executeUpdate();
 
 			if (numeroRegistrosBorrados != 1) {
 				throw new AccesoDatosException("Se han borrado " + numeroRegistrosBorrados + " registros");
 			}
 		} catch (SQLException e) {
 			throw new AccesoDatosException("No se ha podido borrar el producto " + id, e);
+		}
+	}
+
+	@Override
+	public void recuperar(Long id) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_UNDELETE);) {
+
+			cs.setLong(1, id);
+
+			int numeroRegistrosBorrados = cs.executeUpdate();
+
+			if (numeroRegistrosBorrados != 1) {
+				throw new AccesoDatosException("Se han recuperado " + numeroRegistrosBorrados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido recuperado el producto " + id, e);
 		}
 	}
 

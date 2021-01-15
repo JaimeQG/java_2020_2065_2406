@@ -1,5 +1,6 @@
 package com.ipartek.formacion.supermercado.accesodatos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -7,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.supermercado.modelos.Cliente;
@@ -96,6 +98,14 @@ public class ClienteDaoMySql implements Dao<Cliente> {
 			ps.setString(1, cliente.getNombre());
 			ps.setString(2, cliente.getApellidos());
 			ps.setString(3, cliente.getCif());
+
+			CallableStatement cst = con.prepareCall("{call ObtenerDatosAlumno (?,?,?,?)}");
+			cst.registerOutParameter(2, Types.VARCHAR);
+			cst.registerOutParameter(3, Types.INTEGER);
+			cst.registerOutParameter(3, Types.DATE);
+
+			// Ejecuta el procedimiento almacenado
+			// cst.execute();
 
 			Date fecha = null;
 			if (cliente.getFechaNacimiento() != null) {
