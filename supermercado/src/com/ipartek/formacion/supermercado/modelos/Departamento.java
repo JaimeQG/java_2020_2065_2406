@@ -6,7 +6,18 @@ public class Departamento {
 	private Long id;
 	private String nombre, descripcion;
 
+	private boolean correcto = true;
+
+	private String errorId;
+
 	private Set<Producto> productos;
+
+	public Departamento(String id, String nombre, String descripcion) {
+
+		setId(id);
+		setNombre(nombre);
+		setDescripcion(descripcion);
+	}
 
 	public Departamento(Long id, String nombre, String descripcion) {
 		super();
@@ -45,6 +56,19 @@ public class Departamento {
 
 	public void setProductos(Set<Producto> productos) {
 		this.productos = productos;
+	}
+
+	private void setId(String id) {
+		try {
+			setId(id.trim().length() != 0 ? Long.parseLong(id) : null);
+		} catch (NumberFormatException e) {
+			setErrorId("El id debe ser numérico");
+		}
+	}
+
+	public void setErrorId(String errorId) {
+		correcto = false;
+		this.errorId = errorId;
 	}
 
 	@Override

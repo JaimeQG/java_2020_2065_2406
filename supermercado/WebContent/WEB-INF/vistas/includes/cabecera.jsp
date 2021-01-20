@@ -52,20 +52,21 @@
 					-->
 					  	<li class="nav-item dropdown">
         					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          					Mantenimientos
+          					Mantenimientos ...
         					</a>
        						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
           						<a class="dropdown-item" href="admin/index">Productos</a>
           						<a class="dropdown-item" href="admin/maestro">Clientes</a>
          				 		<div class="dropdown-divider"></div>
-          						<a class="dropdown-item" href="#">Departamentos</a>
+          						<a class="dropdown-item" href="admin/indexDpto">Departamentos</a>
         					</div>
       					</li>
       				</c:if>
 				</ul>
 				<ul class="navbar-nav">
 					<li class="nav-item"><a class="nav-link" href="carrito">Ver
-							carrito</a> <c:choose>
+							carrito</a> 
+						<c:choose>
 							<c:when test="${sessionScope.usuario == null}">
 								<li class="nav-item"><a class="nav-link" href="login">Iniciar
 										sesión</a></li>

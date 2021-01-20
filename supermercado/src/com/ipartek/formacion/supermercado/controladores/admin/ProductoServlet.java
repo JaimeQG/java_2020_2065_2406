@@ -114,7 +114,9 @@ public class ProductoServlet extends HttpServlet {
 			String descripcionDepartamento = request.getParameter("departamento-descripcion");
 
 			Departamento departamento = Configuracion.daoDepartamentos
-					.crearYObtener(new Departamento(null, nombreDepartamento, descripcionDepartamento));
+					// .crearYObtener(new Departamento(null, nombreDepartamento,
+					// descripcionDepartamento));
+					.crearYObtener(new Departamento(0L, nombreDepartamento, descripcionDepartamento));
 
 			departamentoIdLong = departamento.getId();
 		}

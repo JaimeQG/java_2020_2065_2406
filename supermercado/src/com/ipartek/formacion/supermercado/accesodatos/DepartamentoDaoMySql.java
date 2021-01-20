@@ -1,24 +1,38 @@
 package com.ipartek.formacion.supermercado.accesodatos;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import com.ipartek.formacion.supermercado.modelos.Departamento;
 
 public class DepartamentoDaoMySql implements Dao<Departamento> {
-	private static final String URL = "jdbc:mysql://localhost:3306/supermercado?serverTimezone=UTC";
-	private static final String USER = "root";
-	private static final String PASS = "";
 
 	private static final String SQL_SELECT = "SELECT * FROM departamentos";
 	private static final String SQL_INSERT = "INSERT INTO departamentos (nombre, descripcion) VALUES (?,?)";
+	private static final String SQL_TEST = "{call departamentos_test(?)}";
+	private static final String SQL_DELETE = "DELETE FROM departamentos WHERE id = ?";
 
+	private DataSource dataSource;
+
+	// SINGLETON
 	private DepartamentoDaoMySql() {
+		try {
+			InitialContext initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			dataSource = (DataSource) envCtx.lookup("jdbc/supermercado");
+		} catch (NamingException e) {
+			throw new AccesoDatosException("No se ha encontrado el JNDI de supermercado", e);
+		}
 	}
 
 	private final static DepartamentoDaoMySql INSTANCIA = new DepartamentoDaoMySql();
@@ -26,18 +40,19 @@ public class DepartamentoDaoMySql implements Dao<Departamento> {
 	public static DepartamentoDaoMySql getInstancia() {
 		return INSTANCIA;
 	}
+	// FIN SINGLETON
 
-	static {
+	private Connection obtenerConexion() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			throw new AccesoDatosException("No se ha encontrado el driver de JDBC para MySQL", e);
+			return dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new AccesoDatosException("Ha habido un error al obtener la conexión", e);
 		}
 	}
 
 	@Override
 	public Iterable<Departamento> obtenerTodos() {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+		try (Connection con = obtenerConexion();
 				Statement s = con.createStatement();
 				ResultSet rs = s.executeQuery(SQL_SELECT)) {
 
@@ -57,8 +72,34 @@ public class DepartamentoDaoMySql implements Dao<Departamento> {
 	}
 
 	@Override
+	public void crear(Departamento departamento) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_TEST);) {
+
+			cs.setString(1, departamento.getNombre());
+			// cs.setString(2, departamento.getDescripcion());
+			// cs.setString(3, "@resultado");
+
+			// int numeroRegistrosInsertados = cs.executeUpdate();
+			String numeroRegistros = null;
+
+			try (ResultSet rs = cs.executeQuery()) {
+
+				if (rs.next()) {
+					numeroRegistros = rs.getString(1);
+					System.out.println("Columna: " + numeroRegistros);
+				}
+				// if (numeroRegistrosInsertados != 1) {
+				// throw new AccesoDatosException("Se han insertado " +
+				// numeroRegistrosInsertados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido insertar el departamento " + departamento, e);
+		}
+	}
+
+	@Override
 	public Departamento crearYObtener(Departamento departamento) {
-		try (Connection con = DriverManager.getConnection(URL, USER, PASS);
+		try (Connection con = obtenerConexion();
 				PreparedStatement ps = con.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);) {
 
 			ps.setString(1, departamento.getNombre());
@@ -72,7 +113,7 @@ public class DepartamentoDaoMySql implements Dao<Departamento> {
 
 			try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
 				if (generatedKeys.next()) {
-					departamento.setId(generatedKeys.getLong(1));
+					departamento.setId(generatedKeys.getLong(1)); // Columna 1
 				} else {
 					throw new AccesoDatosException("Error al buscar el ID generado de departamento");
 				}
@@ -84,4 +125,19 @@ public class DepartamentoDaoMySql implements Dao<Departamento> {
 		}
 	}
 
+	@Override
+	public void eliminar(Long id) {
+		try (Connection con = obtenerConexion(); CallableStatement cs = con.prepareCall(SQL_DELETE);) {
+
+			cs.setLong(1, id);
+
+			int numeroRegistrosBorrados = cs.executeUpdate();
+
+			if (numeroRegistrosBorrados != 1) {
+				throw new AccesoDatosException("Se han borrado " + numeroRegistrosBorrados + " registros");
+			}
+		} catch (SQLException e) {
+			throw new AccesoDatosException("No se ha podido borrar el departamento " + id, e);
+		}
+	}
 }
