@@ -61,9 +61,10 @@ public class AppMedicamento {
 	}
 
 	/**
-	 * Obtiene todos los libros ordenados Alfabeticamente
+	 * Obtiene todos los medicamentos ordenados Alfabeticamente
 	 * 
-	 * @return Collection<Libro>, si no existen libros Lista vacia pero no nula
+	 * @return Collection<Medicamento>, si no existen libros Lista vacia pero no
+	 *         nula
 	 */
 
 	private static void listar() {
@@ -85,14 +86,14 @@ public class AppMedicamento {
 	}
 
 	/**
-	 * Eliminar un Libro por su identificador
+	 * Eliminar un Medicamento por su identificador
 	 * 
 	 * @param id Long identificador
 	 * @return
 	 */
 	private static void eliminar() {
 
-		// Mostramos un listado con los libros
+		// Mostramos un listado con los Medicamentos
 		listar();
 
 		// variables
@@ -169,13 +170,13 @@ public class AppMedicamento {
 
 		// pedimos datos del medicamento por consola
 		try {
-			referencia = validarString("referencia"); // Nombre y descripción libro
+			referencia = validarString("referencia");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
-			nombre = validarString("nombre"); // Nombre y descripción libro
+			nombre = validarString("nombre");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -211,20 +212,20 @@ public class AppMedicamento {
 		 * medicamentoNuevo.setNombre(nombre); medicamentoNuevo.setPrecio(precio);
 		 */
 		// llamar al modelo para guardar en la BBDD
-		do {
-			try {
-				Medicamento medicamentoNuevo = dao.crearYObtener(new Medicamento(null, referencia, nombre, precio));
 
-				// dao.crear(medicamentoNuevo);
-				System.out.println("-------------------------------------");
-				System.out.println("Medicamento guardado correctamente");
-				System.out.println(medicamentoNuevo);
-				System.out.println("-------------------------------------");
-				isError = false;
-			} catch (Exception e) {
-				System.out.println("**error: No se ha podido crear el medicamento");
-			}
-		} while (isError);
+		try {
+			Medicamento medicamentoNuevo = dao.crearYObtener(new Medicamento(null, referencia, nombre, precio));
+
+			// dao.crear(medicamentoNuevo);
+			System.out.println("-------------------------------------");
+			System.out.println("Medicamento guardado correctamente");
+			System.out.println(medicamentoNuevo);
+			System.out.println("-------------------------------------");
+			isError = false;
+		} catch (Exception e) {
+			System.out.println("**error: No se ha podido crear el medicamento");
+		}
+
 	}
 
 	/**
